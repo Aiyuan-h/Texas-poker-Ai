@@ -24,7 +24,10 @@ int init_game_info(game_info *g_info)
 
     return 0;
 }
-
+int del_game_info(game_info *g_info)
+{
+	//gege
+}
 int mask_all_seating_order_with(int seating_order,game_info *g_info)
 {
     int i = 0;
@@ -120,11 +123,45 @@ p_node * get_player_by_pid(int pid,game_info *g_info)
 
     bzero(q,(sizeof(p_node)));
     q->next = NULL;
+    q->pid = pid;
 
     p->next = q;
     return p->next;
 }
-//test 代码
+
+p_node * get_player_by_seating_order_no_add(int seating_order,game_info *g_info)
+{
+    p_node *p,*q;
+    p = g_info->player_list;
+
+    while(p->next != NULL){
+        if(p->next->seating_orde == seating_order ){
+            return p->next;
+        }else{
+           p = p->next;
+        }
+    }
+
+    return NULL;
+}
+
+int get_bet_by_seating_order(int seating_order,game_info *g_info)
+{
+    p_node *p;
+    p = g_info->player_list;
+
+    while(p->next != NULL){
+        if(p->next->seating_orde == seating_order){
+            return p->next->bet;
+        }else{
+           p = p->next;
+        }
+    }
+
+    return -1;
+}
+
+
 static int card_byte_to_s(unsigned char *s2,unsigned char * data)
 {
     unsigned char d = data[1]&0xF0;
@@ -157,8 +194,14 @@ void test_print(game_info *g_info)
 
     printf("--------------------game-info----------------------\n");
     printf("Round:%d\n",g_info->round);
+    printf("Ranking:%d\n",g_info->my_ranking);
     printf("Total player:%d\n",g_info->total_player);
-    printf("Seating Order %d\n",g_info->my_seating);
+    printf("Seating Order:%d\n",g_info->my_seating);
+    printf("Min cost %d\n",g_info->min_cost);
+    printf("My bet:%d\n",g_info->my_bet);
+    printf("Total Raise and all in stage:%d \n",g_info->total_raise_all_in_in_stage);
+    printf("Total flod:%d\n",g_info->total_flod);
+
     switch(g_info->my_role){
     case ROLE_BUTTON:
         printf("Role: button\n");
@@ -187,54 +230,58 @@ void test_print(game_info *g_info)
         printf("Stage: blind\n");
         break;
     case STAGE_HLOD:
-        printf("Stage: hold\n");
+        printf("Stage: hold \nRound in stage:%d\n",\
+               g_info->stage_round[g_info->stage]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[1]);
         printf("Card:%c %d\n",data[0],data[1]);
         break;
     case STAGE_FLOP:
-        printf("Stage: flop\n");
+        printf("Stage: flop \nRound in stage:%d\n",\
+               g_info->stage_round[g_info->stage]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[2]);
         printf("Card:%c %d\n",data[0],data[1]);
         break;
     case STAGE_TURN:
-        printf("Stage: turn\n");
+        printf("Stage: turn \nRound in stage:%d\n",\
+               g_info->stage_round[g_info->stage]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[2]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_turn);
         printf("Card:%c %d\n",data[0],data[1]);
         break;
     case STAGE_RIVER:
-        printf("Stage: river\n");
+        printf("Stage: river \nRound in stage:%d\n",\
+               g_info->stage_round[g_info->stage]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_hold[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[0]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[1]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_flop[2]);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_turn);
-        printf("Card:%c %d\n",data[0],data[1]);
+        printf("Card:%c %d ",data[0],data[1]);
         card_byte_to_s(data,(unsigned char *)&g_info->c_river);
         printf("Card:%c %d\n",data[0],data[1]);
         break;
@@ -243,12 +290,37 @@ void test_print(game_info *g_info)
         break;
     }
 
-
-
+    printf("My Call in this stage %d\n",g_info->my_total_call_in_stage);
     p = g_info->player_list;
     while(p->next != NULL){
-        printf("Player id :%d Seating_order %d\n",p->next->pid,p->next->seating_orde);
+        printf("Player id:%d Seating_order:%d Jetton:%d Money:%d Bet:%d ",\
+               p->next->pid,p->next->seating_orde,p->next->jetton,p->next->money,\
+               p->next->bet);
+        switch (p->next->stat) {
+        case STAT_ALL_IN:
+            printf("All_in\n");
+            break;
+        case STAT_BLIND:
+            printf("Blind\n");
+            break;
+        case STAT_CALL:
+            printf("Call\n");
+            break;
+        case STAT_CHECK:
+            printf("Check\n");
+            break;
+        case STAT_FOLD:
+            printf("Fold\n");
+            break;
+        case STAT_RAISE:
+            printf("Raise\n");
+            break;
+        default:
+            printf("Error\n");
+            break;
+        }
         p = p->next;
     }
+    printf("Total pot:%d\n",g_info->total_pot);
     printf("--------------------------------------------------\n");
 }

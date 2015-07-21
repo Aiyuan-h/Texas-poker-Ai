@@ -28,6 +28,7 @@
 #define COLL_RIVER       8
 #define COLL_SHOWDOWN    9
 #define COLL_POT_WIN     10
+#define COLL_NOTIFY      11
 
 #define RE_COLL_ERROR   -1
 #define RE_COLL_COLSED   0
@@ -42,19 +43,6 @@
 #define RE_ACTION_ERROR  -1
 #define RE_ACTION_OK     0
 
-#define CARD_2   2
-#define CARD_3   2
-#define CARD_4   2
-#define CARD_5   2
-#define CARD_6   2
-#define CARD_7   2
-#define CARD_8   2
-#define CARD_9   2
-#define CARD_10  2
-#define CARD_J   2
-#define CARD_Q   2
-#define CARD_K   2
-#define CARD_A   2
 
 typedef struct startup_inform{
         struct sockaddr_in client_addr,service_addr;

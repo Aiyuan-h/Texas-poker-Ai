@@ -1,0 +1,2 @@
+../source/game_socket.o: ../source/game_socket.c ../source/game_socket.h \
+ ../source/game_info.h

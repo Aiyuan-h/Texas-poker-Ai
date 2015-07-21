@@ -55,12 +55,13 @@
 #define POINT_MASK_B 0x1ffff
 
 
-#define STAGE_SEAT      0x01
-#define STAGE_BLIND     0x02
-#define STAGE_HLOD      0x03
-#define STAGE_FLOP      0x04
-#define STAGE_TURN      0x05
-#define STAGE_RIVER     0x06
+
+#define STAGE_HLOD      0x01
+#define STAGE_FLOP      0x02
+#define STAGE_TURN      0x03
+#define STAGE_RIVER     0x04
+#define STAGE_SEAT      0x05
+#define STAGE_BLIND     0x06
 
 #define ROLE_BUTTON     1
 #define ROLE_BLIND      2
@@ -68,19 +69,41 @@
 #define ROLE_BBLIND     4
 #define ROLE_PLAYER     5
 
+#define STAT_BUTTON    1
+#define STAT_BLIND     2
+#define STAT_CHECK     3
+#define STAT_CALL      4
+#define STAT_RAISE     5
+#define STAT_ALL_IN    6
+#define STAT_FOLD      7
+
+
 typedef struct play_node{
     int pid;
     int seating_orde;
     int jetton;
     int money;
+    int bet;
+    unsigned char stat;
     struct play_node *next;
 } p_node;
 
 
 typedef struct collected_inform{
     //轮数记录
-    int round;    
-    unsigned char stage;
+    int round;
+    int my_ranking;
+    int my_bet;
+    int my_jetton;
+    int my_money;
+    int min_cost;
+    int total_pot;
+    int total_flod;
+    int total_raise_all_in_in_stage;
+    int my_total_call_in_stage;
+    int stage_round[STAGE_RIVER+1];
+    unsigned char my_stat;
+    unsigned char stage;    
     unsigned char my_role;
     unsigned char my_seating;
     unsigned char total_player;
@@ -93,11 +116,14 @@ typedef struct collected_inform{
 
 
 int init_game_info(game_info *g_info);
+int del_game_info(game_info *g_info);
 int mask_all_seating_order_with(int seating_order,game_info *g_info);
 int del_all_seating_order_with(int seating_order,game_info *g_info);
 int updata_player_by_pid(game_info *g_info,p_node player);
 int get_seating_order_by_pid(int pid,game_info *g_info);
+int get_bet_by_seating_order(int seating_order,game_info *g_info);
 p_node * get_player_by_pid(int pid,game_info *g_info);
+p_node * get_player_by_seating_order_no_add(int seating_order,game_info *g_info);
 void test_print(game_info *g_info);
 
 #endif // GAME_INFO_H

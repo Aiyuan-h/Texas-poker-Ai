@@ -1,0 +1,1 @@
+../source/game_lookup_table.o: ../source/game_lookup_table.c

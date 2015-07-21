@@ -7,10 +7,10 @@ SRCS := $(SOBJS:.o=.c)
 DEP := $(SOBJS:.o=.dep) 
 
 $(TARGETDIR)game: $(DEP) $(SOBJS)
-	gcc -O3 -o $@ $(SOBJS) -lm
+	gcc -o $@ $(SOBJS) -lm
 
 $(SOURCEDIR)%.o:$(SOURCEDIR)%.c
-	gcc -O3 -o $@ -c $<
+	gcc -o $@ -c $<
 
 $(SOURCEDIR)%.dep: $(SOURCEDIR)%.c
 	gcc -MM $<   -MT $(@:.dep=.o) >$@
