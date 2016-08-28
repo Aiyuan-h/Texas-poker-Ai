@@ -12,7 +12,8 @@
 #include "game_socket.h"
 #include "game_action.h"
 #include "game_info.h"
-dfja;l
+dfja;dfas
+dsfjsd;alf
 int main(int argc,char * argv[])
 {
     startup_info s_info;
