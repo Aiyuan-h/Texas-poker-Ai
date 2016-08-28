@@ -12,10 +12,7 @@
 #include "game_socket.h"
 #include "game_action.h"
 #include "game_info.h"
-dfsfsaf11111111111111111
-22222222222222222ddddddd
-sdfsfsf
-sfdsfs
+11111111111111111
 33333333333333333
 int main(int argc,char * argv[])
 {
