@@ -12,7 +12,8 @@
 #include "game_socket.h"
 #include "game_action.h"
 #include "game_info.h"
-
+11111111111111111
+22222222222222222
 int main(int argc,char * argv[])
 {
     startup_info s_info;
