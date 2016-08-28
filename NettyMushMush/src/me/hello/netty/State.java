@@ -3,7 +3,8 @@ package me.hello.netty;
 public enum State {
 	on,
 	off
-}sdfsdfsadfasfdas
+}sdfsdfsadfadsf
+sdfssfdas
 dsfsdfs
 dsfsdfsafsa
 
