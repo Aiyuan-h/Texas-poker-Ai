@@ -12,8 +12,14 @@
 #include "game_socket.h"
 #include "game_action.h"
 #include "game_info.h"
+<<<<<<< HEAD
 11111111111111111
 22222222222222222
+=======
+333333333333333333333333
+444444444444444444444444444444444
+
+>>>>>>> 6b978be535d6cdaecef17d06df27501a57daf311
 int main(int argc,char * argv[])
 {
     startup_info s_info;
